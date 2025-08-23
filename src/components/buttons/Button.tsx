@@ -25,7 +25,7 @@ function Button({
   const baseClass =
     "flex items-center gap-2 py-2 px-4 rounded-lg font-semibold text-sm md:text-base transition-colors cursor-pointer";
   const variants: Record<string, string> = {
-    primary: "bg-blue-600 text-white hover:bg-blue-700",
+    primary: "bg-cyan-700 text-white hover:bg-blue-700",
     danger: "bg-red-600 text-white hover:bg-red-700",
     info: "bg-sky-600 text-white hover:bg-sky-700",
     warning: "bg-yellow-500 text-white hover:bg-yellow-600",

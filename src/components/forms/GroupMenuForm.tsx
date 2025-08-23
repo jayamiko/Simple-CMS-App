@@ -24,8 +24,12 @@ function GroupMenuForm({ groupId }: { groupId: string }) {
 
   const isError: FieldError | undefined = errors.title || errors.path;
 
-  const handleAddGroup = (data: MenuPayload) => {
+  const maxMenuReached: boolean = group.menus.length >= 5;
+
+  const handleAddMenu = (data: MenuPayload) => {
+    if (maxMenuReached) return;
     if (!data.title.trim() || !data.path.trim()) return;
+
     dispatch(
       addMenu({ groupId, title: data.title.trim(), path: data.path.trim() })
     );
@@ -35,7 +39,7 @@ function GroupMenuForm({ groupId }: { groupId: string }) {
   return (
     <form
       className="grid gap-3 sm:grid-cols-3"
-      onSubmit={handleSubmit(handleAddGroup)}
+      onSubmit={handleSubmit(handleAddMenu)}
     >
       <FormField
         name="title"
@@ -50,6 +54,7 @@ function GroupMenuForm({ groupId }: { groupId: string }) {
           },
         })}
         error={errors.title}
+        disabled={maxMenuReached}
       />
       <FormField
         name="path"
@@ -57,7 +62,7 @@ function GroupMenuForm({ groupId }: { groupId: string }) {
         placeholder="/path/subpath"
         isRequired
         register={register("path", {
-          required: "path is required",
+          required: "Path is required",
           pattern: {
             value: /^\/[a-zA-Z0-9-_]+(\/[a-zA-Z0-9-_]+)*$/,
             message: "Path must start with '/' and be in format /path/subpath",
@@ -67,9 +72,10 @@ function GroupMenuForm({ groupId }: { groupId: string }) {
         onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
           if (e.key === "Enter") {
             e.preventDefault();
-            handleSubmit(handleAddGroup)();
+            handleSubmit(handleAddMenu)();
           }
         }}
+        disabled={maxMenuReached}
       />
       <div
         className={`sm:col-span-1 flex ${
@@ -79,9 +85,14 @@ function GroupMenuForm({ groupId }: { groupId: string }) {
         <Button
           type="submit"
           icon={<FaPlus />}
-          customClass="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
+          disabled={maxMenuReached}
+          customClass={`inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2 text-white ${
+            maxMenuReached
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-emerald-600 hover:bg-emerald-700"
+          }`}
         >
-          Add Menu
+          {maxMenuReached ? "Max 5 Menus Reached" : "Add Menu"}
         </Button>
       </div>
     </form>

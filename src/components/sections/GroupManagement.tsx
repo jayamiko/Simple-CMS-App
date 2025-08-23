@@ -9,7 +9,7 @@ function GroupManagement() {
   const groups: MenuGroup[] = useAppSelector((s: RootState) => s.menu.groups);
 
   return (
-    <section className="rounded-2xl border p-4 sm:p-6 shadow-sm">
+    <section className="rounded-2xl border p-4 sm:p-6 shadow-sm ">
       <GroupForm />
 
       {groups?.length > 0 && <MenuGroupList groups={groups} />}

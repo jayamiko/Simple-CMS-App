@@ -4,6 +4,7 @@ import { Menu, MenuGroup, reorderMenu } from "@/store/slices/menuSlice";
 import { RootState } from "@/store/store";
 import GroupMenuForm from "../forms/GroupMenuForm";
 import MenuItemList from "./MenuItemList";
+import { FaInfo } from "react-icons/fa";
 
 function GroupMenus({ groupId }: { groupId: string }) {
   const dispatch = useAppDispatch();
@@ -39,7 +40,10 @@ function GroupMenus({ groupId }: { groupId: string }) {
     <div className="mt-4 rounded-xl border bg-gray-50 p-4">
       <GroupMenuForm groupId={groupId} />
 
-      <ul className="mt-4 rounded-xl bg-white">
+      <ul className="mt-4 rounded-xl bg-white space-y-1">
+        <i className="text-xs text-gray-700 flex">
+          <FaInfo /> You can change the menu order by dragging the menu.
+        </i>
         {group.menus.length === 0 && (
           <li className="p-4 text-sm text-gray-500">Belum ada menu</li>
         )}

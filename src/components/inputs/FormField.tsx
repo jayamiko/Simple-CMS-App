@@ -10,6 +10,7 @@ type FormFieldProps = {
   register: UseFormRegisterReturn;
   error?: FieldError;
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement> | undefined;
+  disabled: boolean;
 };
 
 function FormField({
@@ -20,6 +21,7 @@ function FormField({
   register,
   error,
   onKeyDown,
+  disabled,
 }: FormFieldProps) {
   const nameField: string = toKebabCase(name);
 
@@ -39,6 +41,7 @@ function FormField({
         placeholder={placeholder}
         required={isRequired}
         onKeyDown={onKeyDown}
+        disabled={disabled}
       />
       {error && <p className="text-red-500 text-xs mt-1">{error.message}</p>}
     </div>

@@ -48,7 +48,7 @@ const MenuLayout = ({ slug }: MenuLayoutProps) => {
         )}
 
         <Button
-          variant="info"
+          variant="primary"
           onClick={() => router.back()}
           icon={<FaArrowLeft />}
         >
