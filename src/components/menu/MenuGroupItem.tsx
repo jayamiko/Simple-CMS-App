@@ -18,6 +18,12 @@ function MenuGroupItem({ item, expanded, setExpanded, children }: Props) {
     (s: RootState) => s.menu.selectedGroupId
   );
 
+  const group: MenuGroup | undefined = useAppSelector((s: RootState) =>
+    s.menu.groups.find((x: MenuGroup) => x.id === item.id)
+  );
+
+  if (!group) return null;
+
   const toggle = (id: string) =>
     setExpanded((p: Record<string, boolean>) => ({ ...p, [id]: !p[id] }));
 
@@ -26,16 +32,18 @@ function MenuGroupItem({ item, expanded, setExpanded, children }: Props) {
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div className="font-medium">{item.name}</div>
         <div className="flex items-center gap-2">
-          <Button
-            onClick={() => dispatch(selectGroup(item.id))}
-            customClass={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm ${
-              item.id === selectedGroupId
-                ? "bg-green-600 text-white"
-                : "bg-gray-200 hover:bg-gray-300"
-            }`}
-          >
-            {item.id === selectedGroupId ? "Used" : "Use"}
-          </Button>
+          {group?.menus?.length > 0 && (
+            <Button
+              onClick={() => dispatch(selectGroup(item.id))}
+              customClass={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm cursor-pointer ${
+                item.id === selectedGroupId
+                  ? "bg-green-600 text-white"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
+            >
+              {item.id === selectedGroupId ? "Used" : "Use"}
+            </Button>
+          )}
           <Button
             onClick={() => toggle(item.id)}
             customClass="rounded-lg border px-3 py-1 text-sm hover:bg-gray-50 cursor-pointer"
@@ -52,7 +60,7 @@ function MenuGroupItem({ item, expanded, setExpanded, children }: Props) {
           </Button>
           <Button
             onClick={() => dispatch(removeGroup(item.id))}
-            customClass="inline-flex items-center gap-2 rounded-lg bg-red-600 px-3 py-2 text-sm text-white hover:bg-red-700"
+            customClass="inline-flex items-center gap-2 rounded-lg bg-red-600 px-3 py-2 text-sm text-white hover:bg-red-700 cursor-pointer"
           >
             <FaTrash />
           </Button>

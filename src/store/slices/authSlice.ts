@@ -24,7 +24,7 @@ const authSlice = createSlice({
   reducers: {
     login: (state, action: PayloadAction<LoginPayload>) => {
       const { email, password } = action.payload;
-      const foundUser = users.find(
+      const foundUser: User | undefined = users.find(
         (u) => u.email === email && u.password === password
       );
 

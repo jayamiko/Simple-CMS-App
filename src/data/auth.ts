@@ -7,6 +7,11 @@ export interface User {
 export const users: User[] = [
   {
     fullname: "Jaya Miko",
+    email: "jayamiko4@gmail.com",
+    password: "jayamiko",
+  },
+  {
+    fullname: "User1",
     email: "user1@gmail.com",
     password: "user123",
   },

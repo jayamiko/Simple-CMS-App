@@ -1,6 +1,6 @@
 import React from "react";
 import { FieldError, UseFormRegisterReturn } from "react-hook-form";
-import { toKebabCase } from "@/utils/helpers";
+import { camelCaseToTitle, toKebabCase } from "@/utils/helpers";
 
 type FormFieldProps = {
   name: string;
@@ -29,7 +29,7 @@ function FormField({
         htmlFor={nameField}
         className="block text-sm font-medium text-gray-700 capitalize"
       >
-        {name}
+        {camelCaseToTitle(name)}
       </label>
       <input
         id={nameField}

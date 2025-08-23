@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { addMenu, MenuGroup, MenuPayload } from "@/store/slices/menuSlice";
 import { RootState } from "@/store/store";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { FieldError, useForm } from "react-hook-form";
 import FormField from "../inputs/FormField";
 import Button from "../buttons/Button";
 import { FaPlus } from "react-icons/fa";
@@ -21,6 +21,8 @@ function GroupMenuForm({ groupId }: { groupId: string }) {
   } = useForm<MenuPayload>();
 
   if (!group) return null;
+
+  const isError: FieldError | undefined = errors.title || errors.path;
 
   const handleAddGroup = (data: MenuPayload) => {
     if (!data.title.trim() || !data.path.trim()) return;
@@ -42,16 +44,24 @@ function GroupMenuForm({ groupId }: { groupId: string }) {
         isRequired
         register={register("title", {
           required: "Title is required",
+          pattern: {
+            value: /^[A-Z][a-z]+$/,
+            message: "Title must start with uppercase and rest lowercase",
+          },
         })}
         error={errors.title}
       />
       <FormField
         name="path"
         type="text"
-        placeholder="Enter The Path"
+        placeholder="/path/subpath"
         isRequired
         register={register("path", {
           required: "path is required",
+          pattern: {
+            value: /^\/[a-zA-Z0-9-_]+(\/[a-zA-Z0-9-_]+)*$/,
+            message: "Path must start with '/' and be in format /path/subpath",
+          },
         })}
         error={errors.path}
         onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -61,7 +71,11 @@ function GroupMenuForm({ groupId }: { groupId: string }) {
           }
         }}
       />
-      <div className="sm:col-span-1 flex items-end">
+      <div
+        className={`sm:col-span-1 flex ${
+          isError ? "items-center" : "items-end"
+        }`}
+      >
         <Button
           type="submit"
           icon={<FaPlus />}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import FormField from "../inputs/FormField";
 import { useRouter } from "next/navigation";
 import Button from "../buttons/Button";
@@ -23,10 +23,13 @@ function LoginForm() {
 
   const onSubmit = (data: LoginPayload) => {
     dispatch(login(data));
+  };
+
+  useEffect(() => {
     if (isAuthenticated) {
       router.push("/");
     }
-  };
+  }, [isAuthenticated, router]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -55,7 +58,12 @@ function LoginForm() {
         }}
       />
       <div className="flex items-center justify-center">
-        <Button type="submit">Login</Button>
+        <Button
+          type="submit"
+          customClass="w-full text-center py-2 px-4 rounded-lg font-semibold transition-colors cursor-pointer bg-blue-600 text-white hover:bg-blue-700"
+        >
+          Login
+        </Button>
       </div>
     </form>
   );

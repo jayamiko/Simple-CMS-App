@@ -1,13 +1,13 @@
-import { useAppSelector } from "@/hooks/hooks";
 import { MenuGroup } from "@/store/slices/menuSlice";
-import { RootState } from "@/store/store";
 import React, { useState } from "react";
 import GroupMenus from "./GroupMenus";
 import MenuGroupItem from "./MenuGroupItem";
 
-function MenuGroupList() {
-  const groups = useAppSelector((s: RootState) => s.menu.groups);
+type Props = {
+  groups: MenuGroup[];
+};
 
+function MenuGroupList({ groups }: Props) {
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
 
   return (
