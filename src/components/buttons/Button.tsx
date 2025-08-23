@@ -8,7 +8,7 @@ type Props = {
   variant?: "primary" | "danger" | "info" | "warning";
   disabled?: boolean;
   icon?: React.ReactNode;
-  to?: string; // kalau ada, maka button jadi link
+  to?: string;
 };
 
 function Button({

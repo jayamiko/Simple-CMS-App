@@ -1,6 +1,7 @@
 "use client";
 
 import Button from "@/components/buttons/Button";
+import { useAppSelector } from "@/hooks/hooks";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaCog } from "react-icons/fa";
@@ -8,10 +9,13 @@ import { FaCog } from "react-icons/fa";
 function Navbar() {
   const pathname = usePathname();
 
+  const { groups, selectedGroupId } = useAppSelector((s) => s.menu);
+  const selectedGroup = groups.find((g) => g.id === selectedGroupId);
+
   const isActive = (href: string) =>
     pathname === href
-      ? "text-black font-semibold"
-      : "text-gray-600 hover:text-black";
+      ? "text-black font-semibold cursor-pointer"
+      : "text-gray-600 hover:text-black cursor-pointer";
 
   return (
     <header className="w-full sticky top-0 z-10 border-b bg-white/70 backdrop-blur">
@@ -22,13 +26,17 @@ function Navbar() {
               CMS App
             </Link>
           </span>
-          <ul className="w-full flex items-center gap-4 text-sm px-2">
-            <li>
-              <Link href="/settings" className={isActive("/settings")}>
-                Settings
+          <div className="w-full flex gap-4 p-4 bg-gray-100 rounded-lg">
+            {selectedGroup?.menus.map((menu) => (
+              <Link
+                key={menu.id}
+                href={menu.path.startsWith("/") ? menu.path : `/${menu.path}`}
+                className="px-4 py-2 rounded-lg bg-white shadow hover:bg-gray-200 transition cursor-pointer"
+              >
+                {menu.title}
               </Link>
-            </li>
-          </ul>
+            ))}
+          </div>
           <Button variant="warning" icon={<FaCog />} to="/settings">
             Settings
           </Button>

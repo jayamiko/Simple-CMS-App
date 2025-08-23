@@ -48,8 +48,9 @@ function LoginForm() {
         register={register("password", { required: "Password is required" })}
         error={errors.password}
       />
-
-      <Button type="submit">Login</Button>
+      <div className="flex items-center justify-center">
+        <Button type="submit">Login</Button>
+      </div>
     </form>
   );
 }
