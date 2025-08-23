@@ -23,7 +23,7 @@ function Button({
   to,
 }: Props) {
   const baseClass =
-    "flex items-center gap-2 py-2 px-4 rounded-lg font-semibold transition-colors cursor-pointer";
+    "flex items-center gap-2 py-2 px-4 rounded-lg font-semibold text-sm md:text-base transition-colors cursor-pointer";
   const variants: Record<string, string> = {
     primary: "bg-blue-600 text-white hover:bg-blue-700",
     danger: "bg-red-600 text-white hover:bg-red-700",

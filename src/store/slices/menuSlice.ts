@@ -66,9 +66,30 @@ const menuSlice = createSlice({
     selectGroup: (state, action: PayloadAction<string>) => {
       state.selectedGroupId = action.payload;
     },
+    reorderMenu: (
+      state,
+      action: PayloadAction<{
+        groupId: string;
+        fromIndex: number;
+        toIndex: number;
+      }>
+    ) => {
+      const { groupId, fromIndex, toIndex } = action.payload;
+      const group = state.groups.find((g) => g.id === groupId);
+      if (group) {
+        const [removed] = group.menus.splice(fromIndex, 1);
+        group.menus.splice(toIndex, 0, removed);
+      }
+    },
   },
 });
 
-export const { addGroup, removeGroup, addMenu, removeMenu, selectGroup } =
-  menuSlice.actions;
+export const {
+  addGroup,
+  removeGroup,
+  addMenu,
+  removeMenu,
+  selectGroup,
+  reorderMenu,
+} = menuSlice.actions;
 export const menuReducer = menuSlice.reducer;

@@ -15,12 +15,14 @@ export default function StatistikCard({
 }: StatistikCardProps) {
   return (
     <div className="rounded-xl border shadow hover:shadow-md transition">
-      <div
-        className={`text-white ${color} rounded-t-xl text-center py-3 font-semibold`}
+      <h2
+        className={`text-white ${color} rounded-t-xl text-center py-3 font-semibold text-sm md:text-base`}
       >
         {title}
+      </h2>
+      <div className="text-center py-6">
+        <span className="font-bold text-xl md:text-2xl">{value}</span>
       </div>
-      <div className="text-3xl font-bold text-center py-6">{value}</div>
     </div>
   );
 }

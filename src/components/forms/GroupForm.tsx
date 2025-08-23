@@ -49,7 +49,7 @@ function GroupForm() {
           }}
         />
       </div>
-      <div className="w-1/5">
+      <div className="sm:w-2/6 lg:w-1/5 flex justify-end sm:justify-start">
         <Button type="submit" variant="info" icon={<FaPlus />}>
           Add Group
         </Button>
