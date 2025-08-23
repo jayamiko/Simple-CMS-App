@@ -13,11 +13,16 @@ const initialState: AuthState = {
   error: null,
 };
 
+export type LoginPayload = {
+  email: string;
+  password: string;
+};
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<User>) => {
+    login: (state, action: PayloadAction<LoginPayload>) => {
       const { email, password } = action.payload;
       const foundUser = users.find(
         (u) => u.email === email && u.password === password
@@ -29,16 +34,20 @@ const authSlice = createSlice({
         state.error = null;
       } else {
         state.error = "Invalid email or password";
+        state.isAuthenticated = false;
+        state.user = null;
       }
     },
-    logout: (state) => {
-      state.isAuthenticated = false;
-      state.user = null;
-      state.error = null;
+    logout: () => initialState,
+    me: (state, action: PayloadAction<User | null | undefined>) => {
+      if (action.payload) {
+        state.user = action.payload;
+        state.isAuthenticated = true;
+      }
     },
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, me } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;

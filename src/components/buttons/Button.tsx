@@ -1,16 +1,57 @@
+import Link from "next/link";
 import React from "react";
 
 type Props = {
-  type: "submit" | "reset" | "button" | undefined;
+  type?: "submit" | "reset" | "button";
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
   children: React.ReactNode;
+  variant?: "primary" | "danger" | "info" | "warning";
+  disabled?: boolean;
+  icon?: React.ReactNode;
+  to?: string; // kalau ada, maka button jadi link
 };
 
-function Button({ type, children }: Props) {
+function Button({
+  type = "button",
+  onClick,
+  children,
+  variant = "primary",
+  disabled = false,
+  icon,
+  to,
+}: Props) {
+  const baseClass =
+    "flex items-center gap-2 py-2 px-4 rounded-lg font-semibold transition-colors cursor-pointer";
+  const variants: Record<string, string> = {
+    primary: "bg-blue-600 text-white hover:bg-blue-700",
+    danger: "bg-red-600 text-white hover:bg-red-700",
+    info: "bg-sky-600 text-white hover:bg-sky-700",
+    warning: "bg-yellow-500 text-white hover:bg-yellow-600",
+  };
+
+  const className = `${baseClass} ${variants[variant]} ${
+    disabled ? "opacity-50 cursor-not-allowed" : ""
+  }`;
+
+  if (to) {
+    return (
+      <Link href={to}>
+        <button className={className}>
+          {icon}
+          {children}
+        </button>
+      </Link>
+    );
+  }
+
   return (
     <button
       type={type}
-      className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+      className={className}
+      onClick={onClick}
+      disabled={disabled}
     >
+      {icon}
       {children}
     </button>
   );

@@ -1,7 +1,8 @@
+import MainLayout from "@/components/layout/MainLayout";
 import React from "react";
 
-function Page() {
-  return <div>Settings</div>;
+function Settings() {
+  return <MainLayout>Settings</MainLayout>;
 }
 
-export default Page;
+export default Settings;

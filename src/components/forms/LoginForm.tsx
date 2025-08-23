@@ -3,8 +3,7 @@ import FormField from "../inputs/FormField";
 import { useRouter } from "next/navigation";
 import Button from "../buttons/Button";
 import { RootState } from "@/store/store";
-import { login } from "@/store/slices/authSlice";
-import { User } from "@/data/auth";
+import { login, LoginPayload } from "@/store/slices/authSlice";
 import ErrorAlert from "../alerts";
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
@@ -14,7 +13,7 @@ function LoginForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<User>();
+  } = useForm<LoginPayload>();
 
   const dispatch = useAppDispatch();
   const { isAuthenticated, error } = useAppSelector(
@@ -22,7 +21,7 @@ function LoginForm() {
   );
   const router = useRouter();
 
-  const onSubmit = (data: User) => {
+  const onSubmit = (data: LoginPayload) => {
     dispatch(login(data));
     if (isAuthenticated) {
       router.push("/");
