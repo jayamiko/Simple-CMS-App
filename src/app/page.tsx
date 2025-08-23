@@ -2,13 +2,14 @@
 
 import Button from "@/components/buttons/Button";
 import { WelcomeCard } from "@/components/cards/WelcomeCard";
+import Header from "@/components/headers/Header";
 import MainLayout from "@/components/layout/MainLayout";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { logout, me } from "@/store/slices/authSlice";
 import { RootState } from "@/store/store";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { FaSignOutAlt } from "react-icons/fa";
+import { FaHome, FaSignOutAlt } from "react-icons/fa";
 
 export default function Home() {
   const router = useRouter();
@@ -43,9 +44,8 @@ export default function Home() {
   return (
     <MainLayout>
       <div className="flex items-center justify-between">
-        <span className="text-sm md:text-base text-gray-800 font-bold">
-          Home
-        </span>
+        <Header title="Home" icon={<FaHome />} />
+
         <Button variant="danger" onClick={handleLogout} icon={<FaSignOutAlt />}>
           Logout
         </Button>

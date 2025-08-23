@@ -47,6 +47,12 @@ function LoginForm() {
         isRequired
         register={register("password", { required: "Password is required" })}
         error={errors.password}
+        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            handleSubmit(onSubmit)();
+          }
+        }}
       />
       <div className="flex items-center justify-center">
         <Button type="submit">Login</Button>

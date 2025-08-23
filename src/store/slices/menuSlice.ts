@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface Menu {
+export interface Menu {
   id: string;
   title: string;
   path: string;
 }
 
-interface MenuGroup {
+export interface MenuGroup {
   id: string;
   name: string;
   menus: Menu[];
@@ -20,6 +20,15 @@ interface MenuState {
 const initialState: MenuState = {
   groups: [],
   selectedGroupId: null,
+};
+
+export type GroupPayload = {
+  groupName: string;
+};
+
+export type MenuPayload = {
+  title: string;
+  path: string;
 };
 
 const menuSlice = createSlice({

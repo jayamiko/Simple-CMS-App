@@ -3,6 +3,7 @@ import React from "react";
 
 type Props = {
   type?: "submit" | "reset" | "button";
+  customClass?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   children: React.ReactNode;
   variant?: "primary" | "danger" | "info" | "warning";
@@ -13,6 +14,7 @@ type Props = {
 
 function Button({
   type = "button",
+  customClass,
   onClick,
   children,
   variant = "primary",
@@ -36,7 +38,7 @@ function Button({
   if (to) {
     return (
       <Link href={to}>
-        <button className={className}>
+        <button className={customClass ? customClass : className}>
           {icon}
           {children}
         </button>
@@ -47,7 +49,7 @@ function Button({
   return (
     <button
       type={type}
-      className={className}
+      className={customClass ? customClass : className}
       onClick={onClick}
       disabled={disabled}
     >
