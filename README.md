@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js CMS App
 
-## Getting Started
+This is a [Next.js](https://nextjs.org) project bootstrapped [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+It is a simple CMS demo application with authentication, state management, and persistence features.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
+## 🚀 Getting Started
+
+### How to run the project
+
+#### 1. Install dependencies
+
+Run one of the following commands before starting the project:
+
+```
+yarn install
 # or
+npm install
+```
+
+#### 2. Start the development server
+
+```
 yarn dev
+# or
+npm run dev
 # or
 pnpm dev
 # or
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### 3. Open your browser
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Go to [http://localhost:3000](http://localhost:3000)
+to see the app running locally.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔑 Dummy Authentication
 
-## Learn More
+Use the following accounts to log in:
 
-To learn more about Next.js, take a look at the following resources:
+| Email             | Password  |
+| ----------------- | --------- |
+| `user1@gmail.com` | `user123` |
+| `user2@gmail.com` | `user123` |
+| `user3@gmail.com` | `user123` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🌐 Demo
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+If you don’t want to run the project locally, you can try the live demo:
+👉 [https://simple-cms-app-znzy.vercel.app/](https://simple-cms-app-znzy.vercel.app/)
 
-## Deploy on Vercel
+The project is deployed via [vercel](https://vercel.com/font).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## ✨ Features Implemented
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- ✅ Styling with **TailwindCSS** (Utility-first CSS framework)
+
+- ✅ State Management with Redux – used to handle authentication and global state.
+
+- ✅ Form Validation with React Hook Form – for handling login and other forms with validation.
+
+- ✅ Persistence with localStorage – user session and data are saved to localStorage to survive reloads.
+
+- ✅ Logout Flow – users can log out, which clears the persisted session.
+
+- ✅ TypeScript – the project is written in TypeScript for type safety and better developer experience.
+
+## 📝 Notes & Assumptions
+
+- This project is a demo CMS app, intended for educational purposes, not production-ready.
+
+- Authentication is dummy-based (static users in the table above). No backend or secure hashing is implemented.
+
+- The app assumes the browser supports localStorage (commonly available in modern browsers).
+
+- Data persistence is kept simple for demonstration purposes (stored locally, not synced with a real database).
+
+- For production usage, a proper backend with secure auth (JWT, OAuth, etc.) should be implemented.

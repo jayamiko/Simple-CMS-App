@@ -2,18 +2,18 @@ import { User } from "@/types/user";
 
 export const users: User[] = [
   {
-    fullname: "Jaya Miko",
-    email: "jayamiko4@gmail.com",
-    password: "jayamiko",
-  },
-  {
-    fullname: "User1",
+    fullname: "First User",
     email: "user1@gmail.com",
     password: "user123",
   },
   {
-    fullname: "Admin",
-    email: "admin123@gmail.com",
-    password: "admin123",
+    fullname: "Second User",
+    email: "user1@gmail.com",
+    password: "user123",
+  },
+  {
+    fullname: "Third User",
+    email: "user3@gmail.com",
+    password: "user123",
   },
 ];
