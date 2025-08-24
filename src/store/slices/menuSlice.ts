@@ -1,81 +1,75 @@
+import {
+  AddGroupPayload,
+  GroupMenuIDPayload,
+  Menu,
+  MenuGroup,
+  MenuPayload,
+  MenuState,
+  OrderMenuPayload,
+} from "@/types/menu";
+import { findMenuGroupById } from "@/utils/helpers";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-export interface Menu {
-  id: string;
-  title: string;
-  path: string;
-}
-
-export interface MenuGroup {
-  id: string;
-  name: string;
-  menus: Menu[];
-}
-
-interface MenuState {
-  groups: MenuGroup[];
-  selectedGroupId: string | null;
-}
 
 const initialState: MenuState = {
   groups: [],
   selectedGroupId: null,
 };
 
-export type GroupPayload = {
-  groupName: string;
-};
-
-export type MenuPayload = {
-  title: string;
-  path: string;
-};
-
 const menuSlice = createSlice({
   name: "menu",
   initialState,
   reducers: {
-    addGroup: (state, action: PayloadAction<{ id: string; name: string }>) => {
+    addGroup: (state: MenuState, action: PayloadAction<AddGroupPayload>) => {
       state.groups.push({ ...action.payload, menus: [] });
     },
-    removeGroup: (state, action: PayloadAction<string>) => {
-      state.groups = state.groups.filter((g) => g.id !== action.payload);
+    removeGroup: (state: MenuState, action: PayloadAction<string>) => {
+      state.groups = state.groups.filter(
+        (g: MenuGroup) => g.id !== action.payload
+      );
     },
-    addMenu: (
-      state,
-      action: PayloadAction<{ groupId: string; title: string; path: string }>
-    ) => {
-      const group = state.groups.find((g) => g.id === action.payload.groupId);
+    addMenu: (state: MenuState, action: PayloadAction<MenuPayload>) => {
+      const { groupId, path, title } = action.payload;
+
+      const group: MenuGroup | undefined = findMenuGroupById(
+        state.groups,
+        groupId
+      );
+
       if (group) {
         group.menus.push({
           id: crypto.randomUUID(),
-          title: action.payload.title,
-          path: action.payload.path,
+          title: title,
+          path: path,
         });
       }
     },
     removeMenu: (
-      state,
-      action: PayloadAction<{ groupId: string; menuId: string }>
+      state: MenuState,
+      action: PayloadAction<GroupMenuIDPayload>
     ) => {
-      const group = state.groups.find((g) => g.id === action.payload.groupId);
+      const { groupId, menuId } = action.payload;
+
+      const group: MenuGroup | undefined = findMenuGroupById(
+        state.groups,
+        groupId
+      );
+
       if (group) {
-        group.menus = group.menus.filter((m) => m.id !== action.payload.menuId);
+        group.menus = group.menus.filter((m: Menu) => m.id !== menuId);
       }
     },
-    selectGroup: (state, action: PayloadAction<string>) => {
+    selectGroup: (state: MenuState, action: PayloadAction<string>) => {
       state.selectedGroupId = action.payload;
     },
     reorderMenu: (
-      state,
-      action: PayloadAction<{
-        groupId: string;
-        fromIndex: number;
-        toIndex: number;
-      }>
+      state: MenuState,
+      action: PayloadAction<OrderMenuPayload>
     ) => {
       const { groupId, fromIndex, toIndex } = action.payload;
-      const group = state.groups.find((g) => g.id === groupId);
+      const group: MenuGroup | undefined = findMenuGroupById(
+        state.groups,
+        groupId
+      );
       if (group) {
         const [removed] = group.menus.splice(fromIndex, 1);
         group.menus.splice(toIndex, 0, removed);
@@ -92,4 +86,5 @@ export const {
   selectGroup,
   reorderMenu,
 } = menuSlice.actions;
+
 export const menuReducer = menuSlice.reducer;

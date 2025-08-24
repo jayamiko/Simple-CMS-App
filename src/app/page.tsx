@@ -7,15 +7,17 @@ import Header from "@/components/headers/Header";
 import MainLayout from "@/components/layout/MainLayout";
 import { users } from "@/data/auth";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { logout, me } from "@/store/slices/authSlice";
-import { MenuGroup } from "@/store/slices/menuSlice";
+import { usePersistedUser } from "@/hooks/usePersistedUser";
+import { logout } from "@/store/slices/authSlice";
 import { RootState } from "@/store/store";
+import { MenuGroup } from "@/types/menu";
+import { findMenuGroupById } from "@/utils/helpers";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { FaHome, FaSignOutAlt } from "react-icons/fa";
 
 export default function Home() {
-  const router = useRouter();
+  const router: AppRouterInstance = useRouter();
   const dispatch = useAppDispatch();
 
   const { isAuthenticated, user } = useAppSelector(
@@ -25,20 +27,13 @@ export default function Home() {
   const { groups, selectedGroupId } = useAppSelector(
     (state: RootState) => state.menu
   );
-  const selectedGroup = groups.find((g: MenuGroup) => g.id === selectedGroupId);
 
-  useEffect(() => {
-    if (isAuthenticated && !user) {
-      const persistedRoot = localStorage.getItem("persist:root");
-      if (persistedRoot) {
-        const parsedRoot = JSON.parse(persistedRoot);
-        const auth = JSON.parse(parsedRoot.auth);
-        if (auth?.user) {
-          dispatch(me(auth.user));
-        }
-      }
-    }
-  }, [isAuthenticated, user, dispatch]);
+  const selectedGroup: MenuGroup | undefined = findMenuGroupById(
+    groups,
+    selectedGroupId
+  );
+
+  usePersistedUser(isAuthenticated, user);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -73,9 +68,10 @@ export default function Home() {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         <StatistikCard title="Total Groups" value={totalGroups} />
         <StatistikCard title="Total Menus" value={totalMenus} />
-        {selectedGroup?.name && (
-          <StatistikCard title="Group Menu Used" value={selectedGroup?.name} />
-        )}
+        <StatistikCard
+          title="Group Menu Used"
+          value={selectedGroup?.name || "N/A"}
+        />
         <StatistikCard title="Active Users" value={users?.length} />
       </div>
     </MainLayout>

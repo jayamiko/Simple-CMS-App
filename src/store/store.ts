@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { persistReducer, persistStore } from "redux-persist";
+import { Persistor, persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { authReducer } from "./slices/authSlice";
 import { menuReducer } from "./slices/menuSlice";
@@ -22,7 +22,7 @@ export const store = configureStore({
   middleware: (getDefault) => getDefault({ serializableCheck: false }),
 });
 
-export const persistor = persistStore(store);
+export const persistor: Persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

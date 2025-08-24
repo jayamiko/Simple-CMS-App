@@ -1,5 +1,7 @@
-import Link from "next/link";
+"use client";
+
 import React from "react";
+import Link from "next/link";
 
 type Props = {
   type?: "submit" | "reset" | "button";

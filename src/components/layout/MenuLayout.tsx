@@ -1,23 +1,25 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import MainLayout from "./MainLayout";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { useAppSelector } from "@/hooks/hooks";
 import Header from "../headers/Header";
-import { FaArrowLeft, FaHome } from "react-icons/fa";
+import { FaArrowLeft, FaListAlt } from "react-icons/fa";
 import { WelcomeCard } from "../cards/WelcomeCard";
 import { RootState } from "@/store/store";
-import { me } from "@/store/slices/authSlice";
 import Button from "../buttons/Button";
 import { useRouter } from "next/navigation";
+import { findMenuBySlug, findMenuGroupById } from "@/utils/helpers";
+import { Menu, MenuGroup } from "@/types/menu";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { usePersistedUser } from "@/hooks/usePersistedUser";
 
 type MenuLayoutProps = {
   slug: string;
 };
 
 const MenuLayout = ({ slug }: MenuLayoutProps) => {
-  const router = useRouter();
-  const dispatch = useAppDispatch();
+  const router: AppRouterInstance = useRouter();
 
   const { isAuthenticated, user } = useAppSelector(
     (state: RootState) => state.auth
@@ -26,25 +28,22 @@ const MenuLayout = ({ slug }: MenuLayoutProps) => {
     (state: RootState) => state.menu
   );
 
-  useEffect(() => {
-    if (isAuthenticated && !user) {
-      const persistedRoot = localStorage.getItem("persist:root");
-      if (persistedRoot) {
-        const parsedRoot = JSON.parse(persistedRoot);
-        const auth = JSON.parse(parsedRoot.auth);
-        if (auth?.user) dispatch(me(auth.user));
-      }
-    }
-  }, [isAuthenticated, user, dispatch]);
+  usePersistedUser(isAuthenticated, user);
 
-  const selectedGroup = groups.find((g) => g.id === selectedGroupId);
-  const matchedMenu = selectedGroup?.menus.find((menu) => menu.path === slug);
+  const selectedGroup: MenuGroup | undefined = findMenuGroupById(
+    groups,
+    selectedGroupId
+  );
+  const matchedMenu: Menu | undefined = findMenuBySlug(
+    selectedGroup?.menus,
+    slug
+  );
 
   return (
     <MainLayout>
       <div className="flex items-center justify-between">
         {matchedMenu?.title && (
-          <Header title={matchedMenu.title} icon={<FaHome />} />
+          <Header title={matchedMenu.title} icon={<FaListAlt />} />
         )}
 
         <Button

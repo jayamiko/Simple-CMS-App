@@ -3,10 +3,13 @@ import FormField from "../inputs/FormField";
 import { useRouter } from "next/navigation";
 import Button from "../buttons/Button";
 import { RootState } from "@/store/store";
-import { login, LoginPayload } from "@/store/slices/authSlice";
+import { login } from "@/store/slices/authSlice";
 import ErrorAlert from "../alerts";
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { LoginPayload } from "@/types/auth";
+import { handleEnterSubmit } from "@/utils/helpers";
 
 function LoginForm() {
   const {
@@ -15,11 +18,12 @@ function LoginForm() {
     formState: { errors },
   } = useForm<LoginPayload>();
 
+  const router: AppRouterInstance = useRouter();
   const dispatch = useAppDispatch();
+
   const { isAuthenticated, error } = useAppSelector(
     (state: RootState) => state.auth
   );
-  const router = useRouter();
 
   const onSubmit = (data: LoginPayload) => {
     dispatch(login(data));
@@ -50,12 +54,7 @@ function LoginForm() {
         isRequired
         register={register("password", { required: "Password is required" })}
         error={errors.password}
-        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            handleSubmit(onSubmit)();
-          }
-        }}
+        onKeyDown={(e) => handleEnterSubmit(e, handleSubmit, onSubmit)}
       />
       <div className="flex items-center justify-center">
         <Button

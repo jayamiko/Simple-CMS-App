@@ -2,9 +2,11 @@ import React from "react";
 import { RootState } from "@/store/store";
 import { FaChevronDown, FaChevronUp, FaTrash } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { MenuGroup, removeGroup, selectGroup } from "@/store/slices/menuSlice";
+import { removeGroup, selectGroup } from "@/store/slices/menuSlice";
 import Button from "../buttons/Button";
 import { BiCheckCircle, BiPlayCircle } from "react-icons/bi";
+import { findMenuGroupById } from "@/utils/helpers";
+import { MenuGroup } from "@/types/menu";
 
 type Props = {
   item: MenuGroup;
@@ -20,7 +22,7 @@ function MenuGroupItem({ item, expanded, setExpanded, children }: Props) {
   );
 
   const group: MenuGroup | undefined = useAppSelector((s: RootState) =>
-    s.menu.groups.find((x: MenuGroup) => x.id === item.id)
+    findMenuGroupById(s.menu.groups, item.id)
   );
 
   if (!group) return null;

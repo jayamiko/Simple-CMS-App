@@ -6,8 +6,10 @@ import FormField from "../inputs/FormField";
 import { useForm } from "react-hook-form";
 import { FaPlus } from "react-icons/fa";
 import { useAppDispatch } from "@/hooks/hooks";
-import { addGroup, GroupPayload } from "@/store/slices/menuSlice";
+import { addGroup } from "@/store/slices/menuSlice";
 import Button from "../buttons/Button";
+import { GroupPayload } from "@/types/menu";
+import { handleEnterSubmit } from "@/utils/helpers";
 
 function GroupForm() {
   const dispatch = useAppDispatch();
@@ -20,7 +22,7 @@ function GroupForm() {
   } = useForm<GroupPayload>();
 
   const handleAddGroup = (data: GroupPayload) => {
-    const name = data.groupName.trim();
+    const name: string = data.groupName.trim();
     if (!name) return;
     dispatch(addGroup({ id: uuidv4(), name }));
     reset();
@@ -41,12 +43,7 @@ function GroupForm() {
             required: "Group Name is required",
           })}
           error={errors.groupName}
-          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              handleSubmit(handleAddGroup)();
-            }
-          }}
+          onKeyDown={(e) => handleEnterSubmit(e, handleSubmit, handleAddGroup)}
         />
       </div>
       <div className="sm:w-2/6 lg:w-1/5 flex justify-end sm:justify-start">

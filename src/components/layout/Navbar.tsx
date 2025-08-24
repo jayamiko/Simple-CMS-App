@@ -3,26 +3,29 @@
 import Button from "@/components/buttons/Button";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { logout } from "@/store/slices/authSlice";
-import { MenuGroup } from "@/store/slices/menuSlice";
 import { RootState } from "@/store/store";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { FaCog, FaSignOutAlt, FaBars, FaTimes } from "react-icons/fa";
 import { useState } from "react";
 import NavbarMobile from "./NavbarMobile";
+import { findMenuGroupById } from "@/utils/helpers";
+import { MenuGroup } from "@/types/menu";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 function Navbar() {
-  const router = useRouter();
+  const router: AppRouterInstance = useRouter();
   const dispatch = useAppDispatch();
   const pathname: string = usePathname();
 
   const { isAuthenticated } = useAppSelector((state: RootState) => state.auth);
   const { groups, selectedGroupId } = useAppSelector((s: RootState) => s.menu);
-  const selectedGroup: MenuGroup | undefined = groups.find(
-    (g: MenuGroup) => g.id === selectedGroupId
+  const selectedGroup: MenuGroup | undefined = findMenuGroupById(
+    groups,
+    selectedGroupId
   );
 
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
 
   const isMenuActive: (href: string) => boolean = (href: string) =>
     pathname === href;

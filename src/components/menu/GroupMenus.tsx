@@ -1,36 +1,43 @@
 import React, { useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/hooks/hooks";
-import { Menu, MenuGroup, reorderMenu } from "@/store/slices/menuSlice";
+import { reorderMenu } from "@/store/slices/menuSlice";
 import { RootState } from "@/store/store";
 import GroupMenuForm from "../forms/GroupMenuForm";
 import MenuItemList from "./MenuItemList";
 import { FaInfo } from "react-icons/fa";
+import { findMenuGroupById, findMenuIndexes } from "@/utils/helpers";
+import { Menu, MenuGroup } from "@/types/menu";
 
-function GroupMenus({ groupId }: { groupId: string }) {
+type Props = { groupId: string };
+
+function GroupMenus({ groupId }: Props) {
   const dispatch = useAppDispatch();
   const group: MenuGroup | undefined = useAppSelector((s: RootState) =>
-    s.menu.groups.find((x: MenuGroup) => x.id === groupId)
+    findMenuGroupById(s.menu.groups, groupId)
   );
 
   const [draggingId, setDraggingId] = useState<string | null>(null);
 
-  if (!group) return null;
+  const handleDragOver = (e: React.DragEvent<HTMLLIElement>) => {
+    e.preventDefault();
+  };
 
   const handleDragStart = (e: React.DragEvent<HTMLLIElement>, id: string) => {
     setDraggingId(id);
     e.dataTransfer.effectAllowed = "move";
   };
 
-  const handleDragOver = (e: React.DragEvent<HTMLLIElement>) => {
-    e.preventDefault();
-  };
+  if (!group) return null;
 
   const handleDrop = (e: React.DragEvent<HTMLLIElement>, targetId: string) => {
     e.preventDefault();
     if (!draggingId || draggingId === targetId) return;
 
-    const fromIndex = group.menus.findIndex((m) => m.id === draggingId);
-    const toIndex = group.menus.findIndex((m) => m.id === targetId);
+    const { fromIndex, toIndex } = findMenuIndexes(
+      group.menus,
+      draggingId,
+      targetId
+    );
 
     dispatch(reorderMenu({ groupId, fromIndex, toIndex }));
     setDraggingId(null);
@@ -51,9 +58,11 @@ function GroupMenus({ groupId }: { groupId: string }) {
           <li
             key={m.id}
             draggable
-            onDragStart={(e) => handleDragStart(e, m.id)}
             onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, m.id)}
+            onDragStart={(e: React.DragEvent<HTMLLIElement>) =>
+              handleDragStart(e, m.id)
+            }
+            onDrop={(e: React.DragEvent<HTMLLIElement>) => handleDrop(e, m.id)}
             className={`transition-colors rounded-lg ${
               draggingId === m.id ? "bg-gray-200" : "bg-white"
             }`}

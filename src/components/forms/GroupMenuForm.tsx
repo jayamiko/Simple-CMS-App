@@ -1,17 +1,18 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { addMenu, MenuGroup, MenuPayload } from "@/store/slices/menuSlice";
+import { addMenu } from "@/store/slices/menuSlice";
 import { RootState } from "@/store/store";
 import React from "react";
 import { FieldError, useForm } from "react-hook-form";
 import FormField from "../inputs/FormField";
 import Button from "../buttons/Button";
 import { FaPlus } from "react-icons/fa";
+import { MenuGroup, MenuPayload } from "@/types/menu";
+import { findMenuGroupById, handleEnterSubmit } from "@/utils/helpers";
 
-function GroupMenuForm({ groupId }: { groupId: string }) {
+type Props = { groupId: string };
+
+function GroupMenuForm({ groupId }: Props) {
   const dispatch = useAppDispatch();
-  const group: MenuGroup | undefined = useAppSelector((s: RootState) =>
-    s.menu.groups.find((x: MenuGroup) => x.id === groupId)
-  );
 
   const {
     register,
@@ -20,11 +21,16 @@ function GroupMenuForm({ groupId }: { groupId: string }) {
     reset,
   } = useForm<MenuPayload>();
 
+  const group: MenuGroup | undefined = useAppSelector((s: RootState) =>
+    findMenuGroupById(s.menu.groups, groupId)
+  );
+
   if (!group) return null;
 
-  const isError: FieldError | undefined = errors.title || errors.path;
-
   const maxMenuReached: boolean = group.menus.length >= 5;
+
+  const isError: FieldError | undefined = errors.title || errors.path;
+  const isDisabled = maxMenuReached || Boolean(isError);
 
   const handleAddMenu = (data: MenuPayload) => {
     if (maxMenuReached) return;
@@ -69,12 +75,7 @@ function GroupMenuForm({ groupId }: { groupId: string }) {
           },
         })}
         error={errors.path}
-        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            handleSubmit(handleAddMenu)();
-          }
-        }}
+        onKeyDown={(e) => handleEnterSubmit(e, handleSubmit, handleAddMenu)}
         disabled={maxMenuReached}
       />
       <div
@@ -85,9 +86,9 @@ function GroupMenuForm({ groupId }: { groupId: string }) {
         <Button
           type="submit"
           icon={<FaPlus />}
-          disabled={maxMenuReached}
+          disabled={isDisabled}
           customClass={`inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2 text-white ${
-            maxMenuReached
+            isDisabled
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-emerald-600 hover:bg-emerald-700"
           }`}

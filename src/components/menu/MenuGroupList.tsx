@@ -1,7 +1,7 @@
-import { MenuGroup } from "@/store/slices/menuSlice";
 import React, { useState } from "react";
 import GroupMenus from "./GroupMenus";
 import MenuGroupItem from "./MenuGroupItem";
+import { MenuGroup } from "@/types/menu";
 
 type Props = {
   groups: MenuGroup[];

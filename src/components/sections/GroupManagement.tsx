@@ -3,7 +3,7 @@ import GroupForm from "../forms/GroupForm";
 import MenuGroupList from "../menu/MenuGroupList";
 import { useAppSelector } from "@/hooks/hooks";
 import { RootState } from "@/store/store";
-import { MenuGroup } from "@/store/slices/menuSlice";
+import { MenuGroup } from "@/types/menu";
 
 function GroupManagement() {
   const groups: MenuGroup[] = useAppSelector((s: RootState) => s.menu.groups);

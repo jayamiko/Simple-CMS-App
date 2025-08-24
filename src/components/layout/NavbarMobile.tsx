@@ -4,7 +4,7 @@ import React from "react";
 import Button from "../buttons/Button";
 import { FaCog, FaSignOutAlt } from "react-icons/fa";
 import Link from "next/link";
-import { Menu, MenuGroup } from "@/store/slices/menuSlice";
+import { Menu, MenuGroup } from "@/types/menu";
 
 type Props = {
   setMobileOpen: React.Dispatch<React.SetStateAction<boolean>>;

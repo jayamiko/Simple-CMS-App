@@ -1,21 +1,13 @@
-import { User, users } from "@/data/auth";
+import { users } from "@/data/auth";
+import { AuthState, LoginPayload } from "@/types/auth";
+import { User } from "@/types/user";
+import { findUser } from "@/utils/helpers";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface AuthState {
-  isAuthenticated: boolean;
-  user: User | null;
-  error: string | null;
-}
 
 const initialState: AuthState = {
   isAuthenticated: false,
   user: null,
   error: null,
-};
-
-export type LoginPayload = {
-  email: string;
-  password: string;
 };
 
 const authSlice = createSlice({
@@ -24,9 +16,7 @@ const authSlice = createSlice({
   reducers: {
     login: (state, action: PayloadAction<LoginPayload>) => {
       const { email, password } = action.payload;
-      const foundUser: User | undefined = users.find(
-        (u) => u.email === email && u.password === password
-      );
+      const foundUser: User | undefined = findUser(users, email, password);
 
       if (foundUser) {
         state.isAuthenticated = true;

@@ -10,7 +10,7 @@ type FormFieldProps = {
   register: UseFormRegisterReturn;
   error?: FieldError;
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement> | undefined;
-  disabled: boolean;
+  disabled?: boolean;
 };
 
 function FormField({

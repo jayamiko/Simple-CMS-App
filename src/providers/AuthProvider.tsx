@@ -4,11 +4,14 @@ import { useEffect } from "react";
 import { useAppSelector } from "@/hooks/hooks";
 import { RootState } from "@/store/store";
 import { usePathname, useRouter } from "next/navigation";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { AuthState } from "@/types/auth";
+import { ChildrenProps } from "@/components/layout/MainLayout";
 
-function AuthGuard({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const auth = useAppSelector((state: RootState) => state.auth);
+function AuthGuard({ children }: ChildrenProps) {
+  const router: AppRouterInstance = useRouter();
+  const pathname: string = usePathname();
+  const auth: AuthState = useAppSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     if (pathname !== "/login") {

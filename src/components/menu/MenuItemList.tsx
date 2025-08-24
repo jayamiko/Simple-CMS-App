@@ -1,22 +1,22 @@
 import React from "react";
 import Button from "../buttons/Button";
-import { Menu, MenuGroup, removeMenu } from "@/store/slices/menuSlice";
+import { removeMenu } from "@/store/slices/menuSlice";
 import { FaTrash } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { RootState } from "@/store/store";
+import { findMenuGroupById } from "@/utils/helpers";
+import { Menu, MenuGroup } from "@/types/menu";
 
-function MenuItemList({
-  groupId,
-  idx,
-  item,
-}: {
+type Props = {
   groupId: string;
   idx: number;
   item: Menu;
-}) {
+};
+
+function MenuItemList({ groupId, idx, item }: Props) {
   const dispatch = useAppDispatch();
   const group: MenuGroup | undefined = useAppSelector((s: RootState) =>
-    s.menu.groups.find((x: MenuGroup) => x.id === groupId)
+    findMenuGroupById(s.menu.groups, groupId)
   );
 
   if (!group) return null;
